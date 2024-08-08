@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: dockerproxy.cn/mongo:5.0
+    volumes:
+      - dbdata:/data/db
+  server:
+    build:
+      context: ./ml-editor-server
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+volumes:
+  dbdata:
