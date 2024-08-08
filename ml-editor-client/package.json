@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.6.0",
+    "@codemirror/view": "^6.30.0",
     "@remix-run/router": "^1.19.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
