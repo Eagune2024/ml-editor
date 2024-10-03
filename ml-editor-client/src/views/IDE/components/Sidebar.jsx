@@ -1,8 +1,14 @@
+import classNames from 'classnames'
+
 export default function SideBar() {
   const isAuthenticated = false
   
+  const sidebarClass = classNames({
+    sidebar: true,
+  });
+
   return (
-    <section>
+    <section className={sidebarClass}>
       <header
         className="sidebar__header"
       >
