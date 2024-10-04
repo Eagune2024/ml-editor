@@ -1,4 +1,6 @@
 @use "sass:math";
+@import './editor.scss';
+@import './toolbar.scss';
 
 .editor-preview-container {
   width: 100%;

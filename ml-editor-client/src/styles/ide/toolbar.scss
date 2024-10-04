@@ -1,0 +1,23 @@
+@use "sass:math";
+
+.toolbar {
+	padding: #{math.div(10, $base-font-size)}rem #{math.div(20, $base-font-size)}rem;
+	display: flex;
+	align-items: center;
+  .toolbar__play-button, .toolbar__stop-button {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-right: #{math.div(15, $base-font-size)}rem;
+    padding: 0;
+    background-color: #d9d9d9;
+    border: none;
+    border-radius: 100%;
+    color: #333;
+    cursor: pointer;
+    height: #{math.div(44, $base-font-size)}rem;
+		width: #{math.div(44, $base-font-size)}rem;
+    outline: none;
+    text-align: center;
+  }
+}
