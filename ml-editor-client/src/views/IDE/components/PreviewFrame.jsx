@@ -20,7 +20,7 @@ export default function PreviewFrame({ fullView, isOverlayVisible }) {
   //   };
   // });
 
-  const frameUrl = 'http://localhost:3000';
+  const frameUrl = 'http://localhost:5173/preview';
   const sandboxAttributes = `allow-forms allow-modals allow-pointer-lock allow-popups 
     allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-downloads`;
   const allow = `accelerometer; ambient-light-sensor; autoplay; bluetooth; camera; encrypted-media; geolocation; gyroscope; \
