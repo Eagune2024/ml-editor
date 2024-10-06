@@ -31,10 +31,11 @@ export default function Header() {
     <div className="toolbar">
       <button
         className='toolbar__play-button'
-      >
-        <PlayIcon focusable="false" aria-hidden="true" onClick={() => {
+        onClick={() => {
           startSketch();
-        }} />
+        }}
+      >
+        <PlayIcon focusable="false" aria-hidden="true" />
       </button>
       <button
         className='toolbar__play-button'
