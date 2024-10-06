@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
-// import getConfig from '../../../utils/getConfig';
-// import { registerFrame } from '../../../utils/dispatcher';
+import { registerFrame } from '../../../utils/Message';
 
 const Frame = styled.iframe`
   min-height: 100%;
@@ -12,13 +11,12 @@ const Frame = styled.iframe`
 
 export default function PreviewFrame({ fullView, isOverlayVisible }) {
   const iframe = useRef();
-  // const previewUrl = getConfig('PREVIEW_URL');
-  // useEffect(() => {
-  //   const unsubscribe = registerFrame(iframe.current.contentWindow, previewUrl);
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // });
+  useEffect(() => {
+    const unsubscribe = registerFrame(iframe.current.contentWindow, 'http://localhost:5173');
+    return () => {
+      unsubscribe();
+    };
+  });
 
   const frameUrl = 'http://localhost:5173/preview';
   const sandboxAttributes = `allow-forms allow-modals allow-pointer-lock allow-popups 
@@ -37,8 +35,6 @@ export default function PreviewFrame({ fullView, isOverlayVisible }) {
         src={frameUrl}
         sandbox={sandboxAttributes}
         allow={allow}
-        allowtransparency
-        allowpaymentrequest
         allowFullScreen
         ref={iframe}
         fullView={fullView}
