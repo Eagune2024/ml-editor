@@ -37,6 +37,8 @@ export default function SideBar() {
           </ul>
         </div>
       </header>
+      <div className="sidebar__root-item">
+      </div>
     </section>
   )
 }

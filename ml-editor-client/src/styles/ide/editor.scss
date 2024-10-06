@@ -48,6 +48,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+    &:hover {
+      background-color: #ed225d;
+      color: #fff;
+    }
   }
 }
 

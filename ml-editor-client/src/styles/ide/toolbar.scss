@@ -1,9 +1,11 @@
 @use "sass:math";
 
 .toolbar {
+  width: 100%;
 	padding: #{math.div(10, $base-font-size)}rem #{math.div(20, $base-font-size)}rem;
 	display: flex;
 	align-items: center;
+  border-bottom: 1px dashed #a6a6a6;
   .toolbar__play-button, .toolbar__stop-button {
     align-items: center;
     display: flex;
@@ -19,5 +21,8 @@
 		width: #{math.div(44, $base-font-size)}rem;
     outline: none;
     text-align: center;
+    &:hover {
+      background-color: #ed225d;
+    }
   }
 }

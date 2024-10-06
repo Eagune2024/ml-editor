@@ -1,0 +1,49 @@
+@use "sass:math";
+
+.sidebar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  .sidebar__header {
+    padding: #{math.div(8, $base-font-size)}rem #{math.div(12, $base-font-size)}rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    .sidebar__title {
+      font-weight: 500;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      .sidebar--contracted & {
+        display: none;
+      }
+    }
+    .sidebar__icons {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      .sidebar--cant-edit & {
+        display: none;
+      }
+      .sidebar__project-options {
+        display: none;
+        width: 100%;
+        .sidebar--project-options & {
+          display: flex;
+        }
+      }
+    }
+  }
+  .sidebar__root-item {
+    position: relative;
+    overflow-y: auto;
+    padding-top: #{math.div(6, $base-font-size)}rem;
+    flex: 1 1 auto;
+    border-top: 1px solid #d9d9d9;
+    .sidebar--contracted & {
+      border: none;
+    }
+  }
+}
