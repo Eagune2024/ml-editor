@@ -8,6 +8,10 @@ const router = createBrowserRouter([
     element: <IDEView />,
   },
   {
+    path: "/editor",
+    element: <IDEView />,
+  },
+  {
     path: '/preview',
     name: 'preview',
     element: <PreviewView />,
