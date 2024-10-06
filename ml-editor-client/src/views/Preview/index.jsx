@@ -1,29 +1,25 @@
-import React, { useEffect } from 'react';
-import { listen } from "../../utils/Message";
+import React, { useEffect, useState } from 'react';
+import { MessageTypes, listen } from "../../utils/Message";
+import EmbedFrame from './components/EmbedFrame';
 
 export default function PreviewView () {
-  
+  const [files, setFiles] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [basePath, setBasePath] = useState('');
+
   function handleMessageEvent(message) {
     const { type, payload } = message;
     switch (type) {
       case MessageTypes.SKETCH:
-        // dispatch(setFiles(payload.files));
-        // setBasePath(payload.basePath);
-        // setTextOutput(payload.textOutput);
-        // setGridOutput(payload.gridOutput);
+        setFiles(payload.files);
+        setBasePath(payload.basePath);
         break;
-      // case MessageTypes.START:
-      //   setIsPlaying(true);
-      //   break;
-      // case MessageTypes.STOP:
-      //   setIsPlaying(false);
-      //   break;
-      // case MessageTypes.REGISTER:
-      //   dispatchMessage({ type: MessageTypes.REGISTER });
-      //   break;
-      // case MessageTypes.EXECUTE:
-      //   dispatchMessage(payload);
-      //   break;
+      case MessageTypes.START:
+        setIsPlaying(true);
+        break;
+      case MessageTypes.STOP:
+        setIsPlaying(false);
+        break;
       default:
         break;
     }
@@ -37,6 +33,12 @@ export default function PreviewView () {
   });
 
   return (
-    <div>预览页面</div>
+    <div>
+      <EmbedFrame
+        isPlaying={isPlaying}
+        files={files}
+        basePath={basePath}
+      />
+    </div>
   )
 }

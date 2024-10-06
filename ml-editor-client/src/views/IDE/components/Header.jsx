@@ -1,21 +1,18 @@
 import PlayIcon from '../../../assets/play.svg';
 import StopIcon from '../../../assets/stop.svg';
-import { dispatchMessage } from '../../../utils/Message';
+import { MessageTypes, dispatchMessage } from '../../../utils/Message';
 
 const startSketch = () => {
-  // TODO: start sketch
   dispatchMessage({
-    // type: MessageTypes.SKETCH,
+    type: MessageTypes.SKETCH,
     payload: {
-      // files: state.files,
+      files: [{ name: 'sketch.js', content: '// Your sketch code here' }],
       basePath: window.location.pathname,
-      // gridOutput: state.preferences.gridOutput,
-      // textOutput: state.preferences.textOutput
     }
   });
-  // dispatchMessage({
-  //   type: MessageTypes.START
-  // });
+  dispatchMessage({
+    type: MessageTypes.START
+  });
 }
 
 export default function Header() {

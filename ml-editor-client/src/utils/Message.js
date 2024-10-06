@@ -2,6 +2,15 @@ const frames = {};
 let frameIndex = 1;
 let listener = null;
 
+export const MessageTypes = {
+  START: 'START',
+  STOP: 'STOP',
+  FILES: 'FILES',
+  SKETCH: 'SKETCH',
+  REGISTER: 'REGISTER',
+  EXECUTE: 'EXECUTE'
+};
+
 export function registerFrame(newFrame, newOrigin) {
   const frameId = frameIndex;
   frameIndex += 1;
@@ -17,7 +26,6 @@ export function dispatchMessage(message) {
   const rawMessage = JSON.parse(JSON.stringify(message));
   Object.keys(frames).forEach((frameId) => {
     const { frame, origin } = frames[frameId];
-    console.log(frame)
     if (frame && frame.postMessage) {
       frame.postMessage(rawMessage, origin);
     }

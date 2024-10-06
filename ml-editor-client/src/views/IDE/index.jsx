@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import RootPage from "../../layout/RootPage";
 import SplitPane from 'react-split-pane';
 import SideBar from "./components/Sidebar";
@@ -7,6 +8,8 @@ import PreviewFrame from "./components/PreviewFrame";
 import Header from './components/Header';
 
 export default function IDEView () {
+  const [files, setFiles] = useState([]);
+ 
   return (
     <RootPage>
       <Header />
