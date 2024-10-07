@@ -1,12 +1,17 @@
+import { useContext, useState, useRef, useEffect } from 'react';
 import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
 import { standardKeymap, } from "@codemirror/commands"
-import { useState, useRef, useEffect } from "react";
+import { FilesContext } from '..';
 
 const emptyMarker = new class extends GutterMarker {
   toDOM() { return document.createTextNode("ø") }
 }
 
 export default function Editor({ fileName }) {
+  const { filesValue, setFileValue } = useContext(FilesContext);
+  // console.log(filesContext)
+  const [currentFile, setCurrentFile] = useState(filesValue.files?.find((file) => file.id === filesValue.selectedFile));
+
   const codemirrorContainerRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +33,11 @@ export default function Editor({ fileName }) {
     return () => { editorView.destroy() }
   }, []);
 
+  useEffect(() => {
+    console.log(111)
+    setCurrentFile(filesValue.files?.find((file) => file.id === filesValue.selectedFile))
+  }, [filesValue])
+
   return (
     <section>
       <div className="editor__header">
@@ -43,7 +53,7 @@ export default function Editor({ fileName }) {
         </button>
         <div className="editor__file-name">
           <span>
-            { fileName }
+            { currentFile?.name }
           </span>
         </div>
       </div>

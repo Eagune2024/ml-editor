@@ -6,48 +6,100 @@ import Editor from "./components/Editor";
 import Console from "./components/Console";
 import PreviewFrame from "./components/PreviewFrame";
 import Header from './components/Header';
+import objectID from 'bson-objectid';
+
+const initialFiles = () => {
+  const a = objectID().toHexString();
+  const b = objectID().toHexString();
+  const c = objectID().toHexString();
+  const r = objectID().toHexString();
+  return [
+    {
+      name: 'root',
+      id: r,
+      _id: r,
+      children: [b, a, c],
+      fileType: 'folder',
+      content: ''
+    },
+    {
+      name: 'sketch.js',
+      content: 'defaultSketch',
+      id: a,
+      _id: a,
+      isSelectedFile: true,
+      fileType: 'file',
+      children: [],
+      filePath: ''
+    },
+    {
+      name: 'index.html',
+      content: 'defaultHTML',
+      id: b,
+      _id: b,
+      fileType: 'file',
+      children: [],
+      filePath: ''
+    },
+    {
+      name: 'style.css',
+      content: 'defaultCSS',
+      id: c,
+      _id: c,
+      fileType: 'file',
+      children: [],
+      filePath: ''
+    }
+  ];
+};
+export const FilesContext = React.createContext();
 
 export default function IDEView () {
-  const [files, setFiles] = useState([]);
- 
+  const [filesValue, setFileValue] = useState( {
+    files: initialFiles(),
+    selectedFile: null
+  });
+
   return (
-    <RootPage>
-      <Header />
-      <main className="editor-preview-container">
-        <SplitPane
-          split='vertical'
-          minSize={150}
-        >
-          <SideBar />
+    <FilesContext.Provider value={{ filesValue, setFileValue }}>
+      <RootPage>
+        <Header />
+        <main className="editor-preview-container">
           <SplitPane
-            split="vertical"
-            defaultSize="50%"
-            resizerStyle={{
-              borderLeftWidth: '2px',
-              borderRightWidth: '2px',
-              width: '2px',
-              margin: '0px 0px'
-            }}
+            split='vertical'
+            minSize={150}
           >
+            <SideBar />
             <SplitPane
-              split="horizontal"
-              primary="second"
-              className="editor-preview-subpanel"
+              split="vertical"
+              defaultSize="50%"
+              resizerStyle={{
+                borderLeftWidth: '2px',
+                borderRightWidth: '2px',
+                width: '2px',
+                margin: '0px 0px'
+              }}
             >
-              <Editor fileName="123.txt" />
-              <Console />
+              <SplitPane
+                split="horizontal"
+                primary="second"
+                className="editor-preview-subpanel"
+              >
+                <Editor fileName="123.txt" />
+                <Console />
+              </SplitPane>
+              <section className="preview-frame-holder">
+                <header className="preview-frame__header">
+                  <h2 className="preview-frame__title">预览</h2>
+                </header>
+                <div className="preview-frame__content">
+                  <PreviewFrame />
+                </div>
+              </section>
             </SplitPane>
-            <section className="preview-frame-holder">
-              <header className="preview-frame__header">
-                <h2 className="preview-frame__title">预览</h2>
-              </header>
-              <div className="preview-frame__content">
-                <PreviewFrame />
-              </div>
-            </section>
           </SplitPane>
-        </SplitPane>
-      </main>
-    </RootPage>
+        </main>
+      </RootPage>
+    </FilesContext.Provider>
   )
 }
