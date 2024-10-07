@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import * as blobUtil from 'blob-util';
 import mime from 'mime';
 
@@ -72,17 +71,5 @@ function EmbedFrame({ files, isPlaying, basePath }) {
     />
   );
 }
-
-EmbedFrame.propTypes = {
-  files: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  isPlaying: PropTypes.bool.isRequired,
-  basePath: PropTypes.string.isRequired,
-};
 
 export default EmbedFrame;

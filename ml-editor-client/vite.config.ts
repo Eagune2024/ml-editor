@@ -14,7 +14,7 @@ export default defineConfig({
     }
   },
   server: {
-    open: '/editor',
+    open: '/editor/',
     proxy: {
       '^/preview$': {
         target: 'http://localhost:5173',
