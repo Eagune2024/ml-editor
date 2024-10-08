@@ -9,8 +9,7 @@ const emptyMarker = new class extends GutterMarker {
 
 export default function Editor({ fileName }) {
   const { filesValue, setFileValue } = useContext(FilesContext);
-  // console.log(filesContext)
-  const [currentFile, setCurrentFile] = useState(filesValue.files?.find((file) => file.id === filesValue.selectedFile));
+  const [currentFile, setCurrentFile] = useState();
 
   const codemirrorContainerRef = useRef(null);
 
@@ -34,7 +33,6 @@ export default function Editor({ fileName }) {
   }, []);
 
   useEffect(() => {
-    console.log(111)
     setCurrentFile(filesValue.files?.find((file) => file.id === filesValue.selectedFile))
   }, [filesValue])
 
