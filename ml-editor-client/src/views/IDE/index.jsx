@@ -6,52 +6,8 @@ import Editor from "./components/Editor";
 import Console from "./components/Console";
 import PreviewFrame from "./components/PreviewFrame";
 import Header from './components/Header';
-import objectID from 'bson-objectid';
+import { initialFiles } from './bootstrap';
 
-const initialFiles = () => {
-  const a = objectID().toHexString();
-  const b = objectID().toHexString();
-  const c = objectID().toHexString();
-  const r = objectID().toHexString();
-  return [
-    {
-      name: 'root',
-      id: r,
-      _id: r,
-      children: [b, a, c],
-      fileType: 'folder',
-      content: ''
-    },
-    {
-      name: 'sketch.js',
-      content: 'defaultSketch',
-      id: a,
-      _id: a,
-      isSelectedFile: true,
-      fileType: 'file',
-      children: [],
-      filePath: ''
-    },
-    {
-      name: 'index.html',
-      content: 'defaultHTML',
-      id: b,
-      _id: b,
-      fileType: 'file',
-      children: [],
-      filePath: ''
-    },
-    {
-      name: 'style.css',
-      content: 'defaultCSS',
-      id: c,
-      _id: c,
-      fileType: 'file',
-      children: [],
-      filePath: ''
-    }
-  ];
-};
 export const FilesContext = React.createContext();
 
 export default function IDEView () {
