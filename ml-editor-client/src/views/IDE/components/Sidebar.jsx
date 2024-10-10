@@ -4,7 +4,7 @@ import FileNode from './FileNode';
 import { FilesContext } from '..';
 
 export default function SideBar() {
-  const { filesValue, setFileValue } = useContext(FilesContext);
+  const { filesValue } = useContext(FilesContext);
   const rootFile = filesValue.files.find((file) => file.name === 'root')
   
   const sidebarClass = classNames({

@@ -1,23 +1,14 @@
+import { useContext } from 'react';
 import PlayIcon from '../../../assets/play.svg';
 import StopIcon from '../../../assets/stop.svg';
 import { MessageTypes, dispatchMessage } from '../../../utils/Message';
+import { FilesContext } from '..';
 
-const startSketch = () => {
+const startSketch = (files) => {
   dispatchMessage({
     type: MessageTypes.SKETCH,
     payload: {
-      files: [{ id: '1234123', name: 'index.html', content: `<!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Document</title>
-        </head>
-        <body>
-          ${Math.random()}
-        </body>
-        </html>`}],
+      files,
       basePath: window.location.pathname,
     }
   });
@@ -27,12 +18,13 @@ const startSketch = () => {
 }
 
 export default function Header() {
+  const { filesValue } = useContext(FilesContext);
   return (
     <div className="toolbar">
       <button
         className='toolbar__play-button'
         onClick={() => {
-          startSketch();
+          startSketch(filesValue.files);
         }}
       >
         <PlayIcon focusable="false" aria-hidden="true" />
