@@ -12,9 +12,10 @@ export default function Editor({ fileName }) {
   const [currentFile, setCurrentFile] = useState();
 
   const codemirrorContainerRef = useRef(null);
+  const editorRef = useRef();
 
   useEffect(() => {
-    let editorView = new EditorView({
+    editorRef.current = new EditorView({
       parent: codemirrorContainerRef.current,
       extensions: [
         lineNumbers(),
@@ -29,11 +30,14 @@ export default function Editor({ fileName }) {
       ],
     });
 
-    return () => { editorView.destroy() }
+    return () => { editorRef.current.destroy() }
   }, []);
 
   useEffect(() => {
-    setCurrentFile(filesValue.files?.find((file) => file.id === filesValue.selectedFile))
+    const curFile = filesValue.files?.find((file) => file.id === filesValue.selectedFile)
+    setCurrentFile(curFile)
+    const currentDocLen = editorRef.current.viewState.state.doc.length
+    if (curFile?.content) editorRef.current.dispatch({ changes: { from: 0, to: currentDocLen, insert: curFile.content } })
   }, [filesValue])
 
   return (

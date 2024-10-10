@@ -85,7 +85,7 @@ export default function IDEView () {
                 primary="second"
                 className="editor-preview-subpanel"
               >
-                <Editor fileName="123.txt" />
+                <Editor />
                 <Console />
               </SplitPane>
               <section className="preview-frame-holder">
