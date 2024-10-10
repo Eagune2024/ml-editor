@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef, useEffect, useImperativeHandle } from 'react';
 import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
 import { standardKeymap, } from "@codemirror/commands"
 import { FilesContext } from '..';
@@ -7,12 +7,21 @@ const emptyMarker = new class extends GutterMarker {
   toDOM() { return document.createTextNode("ø") }
 }
 
-export default function Editor({ fileName }) {
+export default React.forwardRef(function Editor(props, ref) {
   const { filesValue, setFileValue } = useContext(FilesContext);
   const [currentFile, setCurrentFile] = useState();
 
   const codemirrorContainerRef = useRef(null);
   const editorRef = useRef();
+
+  const getContent = () => {
+    const content = editorRef.current.viewState.state.doc.toString() || ''
+    return content
+  }
+  
+  useImperativeHandle(ref, () => ({
+    getContent
+  }))
 
   useEffect(() => {
     editorRef.current = new EditorView({
@@ -41,7 +50,7 @@ export default function Editor({ fileName }) {
   }, [filesValue])
 
   return (
-    <section>
+    <section ref={ref}>
       <div className="editor__header">
         <button
           className="sidebar__contract"
@@ -65,4 +74,4 @@ export default function Editor({ fileName }) {
       />
     </section>
   )
-}
+})

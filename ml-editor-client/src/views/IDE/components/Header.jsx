@@ -17,13 +17,14 @@ const startSketch = (files) => {
   });
 }
 
-export default function Header() {
+export default function Header({ syncFileContent }) {
   const { filesValue } = useContext(FilesContext);
   return (
     <div className="toolbar">
       <button
         className='toolbar__play-button'
         onClick={() => {
+          syncFileContent();
           startSketch(filesValue.files);
         }}
       >

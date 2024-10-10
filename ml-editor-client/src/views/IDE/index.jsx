@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import RootPage from "../../layout/RootPage";
 import SplitPane from 'react-split-pane';
 import SideBar from "./components/Sidebar";
@@ -11,15 +11,21 @@ import { initialFiles } from './bootstrap';
 export const FilesContext = React.createContext();
 
 export default function IDEView () {
-  const [filesValue, setFileValue] = useState( {
+  const [filesValue, setFileValue] = useState({
     files: initialFiles(),
     selectedFile: null
   });
+  const editorRef = useRef();
+  const syncFileContent = () => {
+    const curFile = filesValue.files?.find((file) => file.id === filesValue.selectedFile)
+    curFile.content = editorRef.current.getContent()
+    setFileValue(filesValue)
+  }
 
   return (
     <FilesContext.Provider value={{ filesValue, setFileValue }}>
       <RootPage>
-        <Header />
+        <Header syncFileContent={syncFileContent} />
         <main className="editor-preview-container">
           <SplitPane
             split='vertical'
@@ -41,7 +47,7 @@ export default function IDEView () {
                 primary="second"
                 className="editor-preview-subpanel"
               >
-                <Editor />
+                <Editor ref={editorRef} />
                 <Console />
               </SplitPane>
               <section className="preview-frame-holder">
