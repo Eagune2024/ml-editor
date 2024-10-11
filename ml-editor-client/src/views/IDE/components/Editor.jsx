@@ -8,15 +8,33 @@ import { language, syntaxHighlighting, defaultHighlightStyle } from "@codemirror
 import { javascript } from "@codemirror/lang-javascript"
 
 const languageConf = new Compartment
-const autoLanguage = EditorState.transactionExtender.of(tr => {
-  if (!tr.docChanged) return null
-  let docIsHTML = /^\s*</.test(tr.newDoc.sliceString(0, 100))
-  let stateIsHTML = tr.startState.facet(language) == htmlLanguage
-  console.log(docIsHTML, stateIsHTML)
-  if (docIsHTML == stateIsHTML) return null
-  return {
-    effects: languageConf.reconfigure(docIsHTML ? html() : javascript())
+let currentFileMode
+const getFileMode = (fileName) => {
+  let mode;
+  if (fileName.match(/.+\.js$/i)) {
+    mode = 'javascript';
+  } else if (fileName.match(/.+\.css$/i)) {
+    mode = 'css';
+  } else if (fileName.match(/.+\.(html|xml)$/i)) {
+    mode = 'htmlmixed';
+  } else if (fileName.match(/.+\.json$/i)) {
+    mode = 'application/json';
+  } else if (fileName.match(/.+\.(frag|glsl)$/i)) {
+    mode = 'x-shader/x-fragment';
+  } else if (fileName.match(/.+\.(vert|stl|mtl)$/i)) {
+    mode = 'x-shader/x-vertex';
+  } else {
+    mode = 'text/plain';
   }
+  return mode;
+}
+const autoLanguage = EditorState.transactionExtender.of(tr => {
+  if (currentFileMode === 'htmlmixed') {
+    return { effects: languageConf.reconfigure(html()) }
+  } else if (currentFileMode === 'javascript') {
+    return { effects: languageConf.reconfigure(javascript()) }
+  }
+  return undefined
 })
 
 const emptyMarker = new class extends GutterMarker {
@@ -40,6 +58,16 @@ export default React.forwardRef(function Editor(props, ref) {
   }))
 
   useEffect(() => {
+    const curFile = filesValue.files?.find((file) => file.id === filesValue.selectedFile)
+    setCurrentFile(curFile)
+    const currentDocLen = editorRef.current?.viewState.state.doc.length
+    if (curFile) {
+      currentFileMode = getFileMode(curFile.name)
+      editorRef.current?.dispatch({ changes: { from: 0, to: currentDocLen, insert: curFile.content } })
+    }
+  }, [filesValue])
+
+  useEffect(() => {
     editorRef.current = new EditorView({
       parent: codemirrorContainerRef.current,
       extensions: [
@@ -60,13 +88,6 @@ export default React.forwardRef(function Editor(props, ref) {
 
     return () => { editorRef.current.destroy() }
   }, []);
-
-  useEffect(() => {
-    const curFile = filesValue.files?.find((file) => file.id === filesValue.selectedFile)
-    setCurrentFile(curFile)
-    const currentDocLen = editorRef.current.viewState.state.doc.length
-    if (curFile?.content) editorRef.current.dispatch({ changes: { from: 0, to: currentDocLen, insert: curFile.content } })
-  }, [filesValue])
 
   return (
     <section ref={ref}>
