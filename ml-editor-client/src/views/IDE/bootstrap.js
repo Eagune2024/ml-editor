@@ -1,12 +1,10 @@
 import objectID from 'bson-objectid';
 
-export const defaultSketch = `function setup() {
-  createCanvas(400, 400);
+export const defaultSketch = `function write() {
+  document.write('xxxxx')
 }
-
-function draw() {
-  background(220);
-}`;
+write()  
+`;
 
 export const defaultHTML = `<!DOCTYPE html>
 <html lang="en">
