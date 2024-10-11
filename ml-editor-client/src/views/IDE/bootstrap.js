@@ -17,7 +17,7 @@ export const defaultHTML = `<!DOCTYPE html>
   <body>
     <main>
     </main>
-    <script src="sketch.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
 `;
