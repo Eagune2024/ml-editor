@@ -73,6 +73,27 @@ const resolveScripts = function(sketchDoc, files) {
   });
 }
 
+function resolveStyles(sketchDoc, files) {
+  const cssLinksInHTML = sketchDoc.querySelectorAll('link[rel="stylesheet"]');
+  const cssLinksInHTMLArray = Array.prototype.slice.call(cssLinksInHTML);
+  cssLinksInHTMLArray.forEach((css) => {
+    const href = css.getAttribute('href')
+    if (href && href.match(NOT_EXTERNAL_LINK_REGEX) !== null) {
+      const resolvedFile = resolvePathToFile(href, files);
+      if (resolvedFile) {
+        if (resolvedFile.url) {
+          css.href = resolvedFile.url;
+        } else {
+          const style = sketchDoc.createElement('style');
+          style.innerHTML = `\n${resolvedFile.content}`;
+          sketchDoc.head.appendChild(style);
+          css.parentElement.removeChild(css);
+        }
+      }
+    }
+  });
+}
+
 const injectLocalFiles = function (files, htmlFile, options) {
   const { basePath } = options;
   const parser = new DOMParser();
@@ -83,6 +104,7 @@ const injectLocalFiles = function (files, htmlFile, options) {
   sketchDoc.head.appendChild(base);
 
   resolveScripts(sketchDoc, files);
+  resolveStyles(sketchDoc, files);
 
   return `<!DOCTYPE HTML>\n${sketchDoc.documentElement.outerHTML}`;
 }
