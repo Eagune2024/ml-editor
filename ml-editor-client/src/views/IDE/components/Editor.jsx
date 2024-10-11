@@ -1,7 +1,23 @@
 import React, { useContext, useState, useRef, useEffect, useImperativeHandle } from 'react';
-import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
-import { standardKeymap, } from "@codemirror/commands"
 import { FilesContext } from '..';
+import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
+import { standardKeymap } from "@codemirror/commands"
+import { EditorState, Compartment } from "@codemirror/state"
+import { htmlLanguage, html } from "@codemirror/lang-html"
+import { language, syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
+import { javascript } from "@codemirror/lang-javascript"
+
+const languageConf = new Compartment
+const autoLanguage = EditorState.transactionExtender.of(tr => {
+  if (!tr.docChanged) return null
+  let docIsHTML = /^\s*</.test(tr.newDoc.sliceString(0, 100))
+  let stateIsHTML = tr.startState.facet(language) == htmlLanguage
+  console.log(docIsHTML, stateIsHTML)
+  if (docIsHTML == stateIsHTML) return null
+  return {
+    effects: languageConf.reconfigure(docIsHTML ? html() : javascript())
+  }
+})
 
 const emptyMarker = new class extends GutterMarker {
   toDOM() { return document.createTextNode("ø") }
@@ -27,6 +43,9 @@ export default React.forwardRef(function Editor(props, ref) {
     editorRef.current = new EditorView({
       parent: codemirrorContainerRef.current,
       extensions: [
+        languageConf.of(html()),
+        syntaxHighlighting(defaultHighlightStyle),
+        autoLanguage,
         lineNumbers(),
         gutter({
           class: "cm-mygutter",
