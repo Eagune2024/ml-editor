@@ -3,9 +3,11 @@ import { FilesContext } from '..';
 import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
 import { standardKeymap } from "@codemirror/commands"
 import { EditorState, Compartment } from "@codemirror/state"
-import { htmlLanguage, html } from "@codemirror/lang-html"
-import { language, syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
+import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
+import { html } from "@codemirror/lang-html"
 import { javascript } from "@codemirror/lang-javascript"
+import { css } from "@codemirror/lang-css"
+import { json } from "@codemirror/lang-json"
 
 const languageConf = new Compartment
 let currentFileMode
@@ -19,10 +21,6 @@ const getFileMode = (fileName) => {
     mode = 'htmlmixed';
   } else if (fileName.match(/.+\.json$/i)) {
     mode = 'application/json';
-  } else if (fileName.match(/.+\.(frag|glsl)$/i)) {
-    mode = 'x-shader/x-fragment';
-  } else if (fileName.match(/.+\.(vert|stl|mtl)$/i)) {
-    mode = 'x-shader/x-vertex';
   } else {
     mode = 'text/plain';
   }
@@ -33,6 +31,10 @@ const autoLanguage = EditorState.transactionExtender.of(tr => {
     return { effects: languageConf.reconfigure(html()) }
   } else if (currentFileMode === 'javascript') {
     return { effects: languageConf.reconfigure(javascript()) }
+  } else if (currentFileMode === 'css') {
+    return { effects: languageConf.reconfigure(css()) }
+  } else if (currentFileMode === 'json') {
+    return { effects: languageConf.reconfigure(json()) }
   }
   return undefined
 })
