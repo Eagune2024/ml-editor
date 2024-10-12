@@ -5,7 +5,7 @@ import UserView from "../views/User";
 
 const router = createBrowserRouter([
   {
-    path: "/editor",
+    path: "/",
     name: 'editor',
     element: <IDEView />,
   },

@@ -18,7 +18,9 @@ export default function IDEView () {
   const editorRef = useRef();
   const syncFileContent = () => {
     const curFile = filesValue.files?.find((file) => file.id === filesValue.selectedFile)
-    curFile.content = editorRef.current.getContent()
+    if (curFile) {
+      curFile.content = editorRef.current?.getContent()
+    }
     setFileValue(filesValue)
   }
 
