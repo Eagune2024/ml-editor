@@ -23,12 +23,21 @@ const AppContextProvider = ({ children }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       initializeUser(session);
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
   }, []);
 
 
   return (
     <AppContext.Provider
-      value={username}
+      value={{
+        username,
+        session
+      }}
     >
       {children}
     </AppContext.Provider>

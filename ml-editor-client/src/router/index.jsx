@@ -1,15 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import IDEView from '../views/IDE';
 import PreviewView from "../views/Preview";
+import UserView from "../views/User";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/editor",
+    name: 'editor',
     element: <IDEView />,
   },
   {
-    path: "/editor",
-    element: <IDEView />,
+    path: '/user',
+    name: 'user',
+    element: <UserView />,
   },
   {
     path: '/preview',
