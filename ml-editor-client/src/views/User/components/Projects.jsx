@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import supabase from "../../../supabaseClient";
 import { initialFiles } from '../../IDE/bootstrap';
 import { useAppContext } from "../../../context/appContext";
 
 const ProjectCard = function ({ project }) {
+  const navigate = useNavigate();
+
+  const toEditor = () => {
+    navigate(`/editor?projectId=${project.id}`)
+  }
+
   return (
-    <div>
+    <div
+      onClick={toEditor} 
+    >
       {project.name}
       {project.created_at}
     </div>

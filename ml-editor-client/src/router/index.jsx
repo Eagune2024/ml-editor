@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import IDEView from '../views/IDE';
 import PreviewView from "../views/Preview";
 import UserView from "../views/User";
@@ -6,6 +6,11 @@ import UserView from "../views/User";
 const router = createBrowserRouter([
   {
     path: "/",
+    name: 'home',
+    element: <Navigate to="editor" replace />
+  },
+  {
+    path: "/editor",
     name: 'editor',
     element: <IDEView />,
   },
