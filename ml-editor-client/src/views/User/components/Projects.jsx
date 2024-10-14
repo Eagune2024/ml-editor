@@ -1,14 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import supabase from "../../../supabaseClient";
 import { initialFiles } from '../../IDE/bootstrap';
 import { useAppContext } from "../../../context/appContext";
 
+const ProjectCard = function ({ project }) {
+  return (
+    <div>
+      {project.name}
+      {project.created_at}
+    </div>
+  )
+}
+
 export default function Projects () {
   const { session } = useAppContext()
+  const [projectList, setProjectList] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from('Project').select('*')
+      const { data, error } = await supabase.from('Project').select('name, id, created_at')
+      setProjectList(data)
     }
     fetchData();
   }, [])
@@ -22,10 +33,15 @@ export default function Projects () {
   }
 
   return (
-    <button
-      onClick={createProject}
-    >
-      创建项目
-    </button>
+    <>
+      <button
+        onClick={createProject}
+      >
+        创建项目
+      </button>
+      {
+        projectList.map(project => (<ProjectCard project={project} />))
+      }
+    </>
   )
 }
