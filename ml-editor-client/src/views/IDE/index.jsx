@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RootPage from "../../layout/RootPage";
 import SplitPane from 'react-split-pane';
 import SideBar from "./components/Sidebar";
@@ -7,12 +7,15 @@ import Console from "./components/Console";
 import PreviewFrame from "./components/PreviewFrame";
 import Header from './components/Header';
 import { initialFiles } from './bootstrap';
+import { useSearchParams } from 'react-router-dom';
+import supabase from '../../supabaseClient';
 
 export const FilesContext = React.createContext();
 
 export default function IDEView () {
+  const [searchParams] = useSearchParams();
   const [filesValue, setFileValue] = useState({
-    files: initialFiles(),
+    files: [],
     selectedFile: null
   });
   const editorRef = useRef();
@@ -23,6 +26,32 @@ export default function IDEView () {
     }
     setFileValue(filesValue)
   }
+  
+  useEffect(() => {
+    const projectId = searchParams.get('projectId')
+    const getProject = async () => {
+      await supabase.from('Project').select('*').eq('id', projectId).then((res) => {
+        
+        if (res.data.length > 0) {
+          const files = res.data[0].files
+          console.log(files)
+          setFileValue({
+            files,
+            selectedFile: files[0].id
+          })
+        }
+      })
+    }
+    if (projectId) {
+      getProject()
+    } else {
+      const files = initialFiles();
+      setFileValue({
+        files: files,
+        selectedFile: files[0].id
+      })
+    }
+  }, [searchParams]);
 
   return (
     <FilesContext.Provider value={{ filesValue, setFileValue }}>

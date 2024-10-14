@@ -70,7 +70,7 @@ export default function SideBar() {
           </ul>
         </div>
       </header>
-      <FileNode files={filesValue.files} id={rootFile.id} />
+      { rootFile ? <FileNode files={filesValue.files} id={rootFile.id} /> : <></>}
     </section>
   )
 }
