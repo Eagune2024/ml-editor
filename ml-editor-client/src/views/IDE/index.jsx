@@ -26,22 +26,28 @@ export default function IDEView () {
     }
     setFileValue(filesValue)
   }
+
+  const getProject = async () => {
+    await supabase.from('Project').select('*').eq('id', projectId).then((res) => {
+      if (res.data.length > 0) {
+        const files = res.data[0].files
+        setFileValue({
+          files,
+          selectedFile: files[0].id
+        })
+      }
+    })
+  }
+
+  const saveProject = async () => {
+    await supabase.from('Project').update({
+      id: projectId,
+      files: filesValue.files
+    })
+  }
   
   useEffect(() => {
     const projectId = searchParams.get('projectId')
-    const getProject = async () => {
-      await supabase.from('Project').select('*').eq('id', projectId).then((res) => {
-        
-        if (res.data.length > 0) {
-          const files = res.data[0].files
-          console.log(files)
-          setFileValue({
-            files,
-            selectedFile: files[0].id
-          })
-        }
-      })
-    }
     if (projectId) {
       getProject()
     } else {
