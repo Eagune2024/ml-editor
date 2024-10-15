@@ -17,24 +17,30 @@ const startSketch = (files) => {
   });
 }
 
-export default function Header({ syncFileContent }) {
+export default function Header({ syncFileContent, saveProject }) {
   const { filesValue } = useContext(FilesContext);
   return (
-    <div className="toolbar">
-      <button
-        className='toolbar__play-button'
-        onClick={() => {
-          syncFileContent();
-          startSketch(filesValue.files);
-        }}
-      >
-        <PlayIcon focusable="false" aria-hidden="true" />
-      </button>
-      <button
-        className='toolbar__play-button'
-      >
-        <StopIcon focusable="false" aria-hidden="true" />
-      </button>
-    </div>
+    <>
+      <div className="nav">
+        导航
+        <button onClick={saveProject}>保存项目</button>
+      </div>
+      <div className="toolbar">
+        <button
+          className='toolbar__play-button'
+          onClick={() => {
+            syncFileContent();
+            startSketch(filesValue.files);
+          }}
+        >
+          <PlayIcon focusable="false" aria-hidden="true" />
+        </button>
+        <button
+          className='toolbar__play-button'
+        >
+          <StopIcon focusable="false" aria-hidden="true" />
+        </button>
+      </div>
+    </>
   );
 }

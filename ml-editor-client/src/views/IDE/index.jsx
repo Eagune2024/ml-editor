@@ -27,8 +27,8 @@ export default function IDEView () {
     setFileValue(filesValue)
   }
 
-  const getProject = async () => {
-    await supabase.from('Project').select('*').eq('id', projectId).then((res) => {
+  const getProject = async (projectId) => {
+    await supabase.from('Project').select().eq('id', projectId).then((res) => {
       if (res.data.length > 0) {
         const files = res.data[0].files
         setFileValue({
@@ -40,16 +40,17 @@ export default function IDEView () {
   }
 
   const saveProject = async () => {
+    const projectId = searchParams.get('projectId')
+    syncFileContent()
     await supabase.from('Project').update({
-      id: projectId,
       files: filesValue.files
-    })
+    }).eq('id', projectId).select()
   }
   
   useEffect(() => {
     const projectId = searchParams.get('projectId')
     if (projectId) {
-      getProject()
+      getProject(projectId)
     } else {
       const files = initialFiles();
       setFileValue({
@@ -62,7 +63,7 @@ export default function IDEView () {
   return (
     <FilesContext.Provider value={{ filesValue, setFileValue }}>
       <RootPage>
-        <Header syncFileContent={syncFileContent} />
+        <Header syncFileContent={syncFileContent} saveProject={saveProject} />
         <main className="editor-preview-container">
           <SplitPane
             split='vertical'
