@@ -33,7 +33,7 @@ export default function IDEView () {
         const files = res.data[0].files
         setFileValue({
           files,
-          selectedFile: files[0].id
+          selectedFile: files.filter((file) => file.name === 'index.html')[0].id
         })
       }
     })
