@@ -7,7 +7,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     name: 'home',
-    element: <Navigate to="editor" replace />
+    element: <Navigate to="user" replace />
   },
   {
     path: "/editor",
