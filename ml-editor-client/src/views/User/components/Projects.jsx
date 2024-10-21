@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../../supabaseClient";
 import { initialFiles } from '../../IDE/bootstrap';
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import WrapPromise from "../../../utils/WrapPromise";
 
 const ProjectCard = function ({ project }) {
   const navigate = useNavigate();
@@ -32,20 +33,17 @@ const ProjectCard = function ({ project }) {
   )
 }
 
+const ProjectList = function ({promiseData}) {
+  const { data: projectList, error } = promiseData.read()
+  return (
+    projectList.map((project, index) => (<ProjectCard project={project} key={index} />))
+  )
+}
+
 export default function Projects () {
   const { session } = useAppContext()
-  const [projectList, setProjectList] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      const { data, error } = await supabase.from('Project').select('name, id, created_at')
-      setLoading(false)
-      setProjectList(data)
-    }
-    fetchData();
-  }, [])
+  
+  const promiseData = useMemo(() => WrapPromise(supabase.from('Project').select('name, id, created_at')), [])
 
   const createProject = async () => {
     await supabase.from('Project').insert([{
@@ -62,12 +60,15 @@ export default function Projects () {
       >
         创建项目
       </button>
-      {
-        loading
-      }
-      {
-        projectList.map((project, index) => (<ProjectCard project={project} key={index} />))
-      }
+      <Suspense
+        fallback={
+          <div className="flex items-center text-sm text-muted-foreground">
+            Loading...
+          </div>
+        }
+      >
+        {<ProjectList promiseData={promiseData} />}
+      </Suspense>
     </>
   )
 }
