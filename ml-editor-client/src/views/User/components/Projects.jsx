@@ -24,10 +24,13 @@ const ProjectCard = function ({ project }) {
 export default function Projects () {
   const { session } = useAppContext()
   const [projectList, setProjectList] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       const { data, error } = await supabase.from('Project').select('name, id, created_at')
+      setLoading(false)
       setProjectList(data)
     }
     fetchData();
@@ -48,6 +51,9 @@ export default function Projects () {
       >
         创建项目
       </button>
+      {
+        loading
+      }
       {
         projectList.map(project => (<ProjectCard project={project} />))
       }
