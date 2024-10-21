@@ -3,6 +3,14 @@ import { useNavigate } from "react-router-dom";
 import supabase from "../../../supabaseClient";
 import { initialFiles } from '../../IDE/bootstrap';
 import { useAppContext } from "../../../context/appContext";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 const ProjectCard = function ({ project }) {
   const navigate = useNavigate();
@@ -12,12 +20,15 @@ const ProjectCard = function ({ project }) {
   }
 
   return (
-    <div
-      onClick={toEditor} 
-    >
-      {project.name}
-      {project.created_at}
-    </div>
+    <Card onClick={toEditor} >
+      <CardHeader>
+        <CardTitle>{project.name}</CardTitle>
+        <CardDescription>{project.name}</CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-6">
+        {project.created_at}
+      </CardContent>
+    </Card>
   )
 }
 
@@ -55,7 +66,7 @@ export default function Projects () {
         loading
       }
       {
-        projectList.map(project => (<ProjectCard project={project} />))
+        projectList.map((project, index) => (<ProjectCard project={project} key={index} />))
       }
     </>
   )

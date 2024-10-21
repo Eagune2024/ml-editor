@@ -3,6 +3,7 @@ import PlayIcon from '../../../assets/play.svg';
 import StopIcon from '../../../assets/stop.svg';
 import { MessageTypes, dispatchMessage } from '../../../utils/Message';
 import { FilesContext } from '..';
+import { useNavigate } from "react-router-dom";
 
 const startSketch = (files) => {
   dispatchMessage({
@@ -19,10 +20,16 @@ const startSketch = (files) => {
 
 export default function Header({ syncFileContent, saveProject }) {
   const { filesValue } = useContext(FilesContext);
+
+  const navigate = useNavigate();
+  const toHome = () => {
+    navigate('/')
+  }
+
   return (
     <>
       <div className="nav">
-        导航
+        <button onClick={toHome}>返回首页</button>
         <button onClick={saveProject}>保存项目</button>
       </div>
       <div className="toolbar">
