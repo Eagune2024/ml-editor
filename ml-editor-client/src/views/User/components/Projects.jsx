@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import WrapPromise from "../../../utils/WrapPromise";
 
 const ProjectCard = function ({ project }) {
@@ -63,7 +64,7 @@ export default function Projects () {
       <Suspense
         fallback={
           <div className="flex items-center text-sm text-muted-foreground">
-            Loading...
+            <LoadingSpinner />
           </div>
         }
       >
