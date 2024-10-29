@@ -13,4 +13,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  parserOptions: {
+    sourceType: 'module'
+  }
 }
