@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useMatch } from 'react-router-dom';
 import classnames from 'classnames'
+import BoomIcon from '../../../assets/Boom.svg';
 
 export default function MenuBar () {
   const matchPPT = useMatch('/ppt');
@@ -14,7 +15,7 @@ export default function MenuBar () {
   return (
     <div className="flex items-center bg-slate-50">
       <Link to="" className="focus:shadow-none">
-        <div className="logo w-40 text-center">Logo</div>
+        <div className="flex justify-center w-40"><BoomIcon className="w-20 h-10" /></div>
       </Link>
       <Link to="ppt" className="focus:shadow-none">
         <div className={pptClassNames}>演示</div>
