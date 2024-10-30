@@ -2,12 +2,13 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import IDEView from '../views/IDE';
 import PreviewView from "../views/Preview";
 import UserView from "../views/User";
+import HomeView from "../views/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
     name: 'home',
-    element: <Navigate to="user" replace />
+    element: <HomeView />
   },
   {
     path: "/editor",
