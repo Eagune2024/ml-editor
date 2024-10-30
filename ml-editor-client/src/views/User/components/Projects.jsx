@@ -1,8 +1,8 @@
 import { useMemo, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "../../../supabaseClient";
-import { initialFiles } from '../../IDE/bootstrap';
-import { useAppContext } from "../../../context/appContext";
+import supabase from "@/supabaseClient";
+import { initialFiles } from '@/views/IDE/bootstrap';
+import { useAppContext } from "@/context/appContext";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import WrapPromise from "../../../utils/WrapPromise";
+import WrapPromise from "@/utils/WrapPromise"
 
 const ProjectCard = function ({ project }) {
   const navigate = useNavigate();
