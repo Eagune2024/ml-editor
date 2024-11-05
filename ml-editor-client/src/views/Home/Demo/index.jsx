@@ -8,12 +8,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import WrapPromise from "@/utils/WrapPromise"
 import supabase from "@/supabaseClient";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import { initialFiles } from '@/views/IDE/bootstrap';
 import { useAppContext } from "@/context/appContext";
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
 
 const ProjectCard = function ({ project }) {
   return (
@@ -41,7 +52,7 @@ const ProjectList = function ({promiseData}) {
   )
 }
 
-const LoadingSkeleton = function ({promiseData}) {
+const LoadingSkeleton = function () {
   return (
     <div className="grid grid-cols-5 gap-4 p-10">
       {
@@ -61,24 +72,73 @@ const LoadingSkeleton = function ({promiseData}) {
   )
 }
 
-export default function DemoView () {
-  const { session } = useAppContext()
-  const [query, setQuery] = useState(Date.now());
+const CreateDialog = function ({createProject}) {
+  const [name, setName] = useState('')
+  const [open, setOpen] = useState(false)
 
-  const promiseData = useMemo(() => WrapPromise(supabase.from('Project').select('name, id, created_at')), [query])
-  
-  const createProject = async () => {
-    await supabase.from('Project').insert([{
-      name: 'test',
-      files: initialFiles(),
-      user_id: session.user.id
-    }])
-    setQuery(Date.now());
+  const openChange = (open) => {
+    setName('')
+    setOpen(open)
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    await createProject(name)
+    setOpen(false)
   }
 
   return (
+    <Dialog open={open} onOpenChange={openChange}>
+      <DialogTrigger asChild>
+        <Button className="mt-8 ml-10">创建项目</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>创建DEMO</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">名称</Label>
+              <Input
+                id="name"
+                value={name}
+                className="col-span-3"
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">创建</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default function DemoView () {
+  const { session } = useAppContext()
+  const [loading, setLoading] = useState(false)
+  const [query, setQuery] = useState(Date.now())
+  const promiseData = useMemo(() => WrapPromise(supabase.from('Project').select('name, id, created_at')), [query])
+  
+  const createProject = async (name) => {
+    setLoading(true)
+    await supabase.from('Project').insert([{
+      name: name,
+      files: initialFiles(),
+      user_id: session.user.id
+    }])
+    setQuery(Date.now())
+    setLoading(false)
+  }
+  
+  return (
     <>
-      <Button className="mt-8 ml-10" onClick={createProject}>创建项目</Button>
+      <CreateDialog createProject={createProject} />
       <Suspense fallback={<LoadingSkeleton />}>
         {<ProjectList promiseData={promiseData} />}
       </Suspense>
