@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { MessageTypes, listen } from "../../utils/Message";
+import { registerFrame, MessageTypes, listen, dispatchMessage } from "../../utils/Message";
 import EmbedFrame from './components/EmbedFrame';
 
 export default function PreviewView () {
   const [files, setFiles] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [basePath, setBasePath] = useState('');
+
+  registerFrame(window.parent, 'http://localhost:5173');
 
   function handleMessageEvent(message) {
     const { type, payload } = message;
@@ -19,6 +21,9 @@ export default function PreviewView () {
         break;
       case MessageTypes.STOP:
         setIsPlaying(false);
+        break;
+      case MessageTypes.REGISTER:
+        dispatchMessage({ type: MessageTypes.REGISTER });
         break;
       default:
         break;

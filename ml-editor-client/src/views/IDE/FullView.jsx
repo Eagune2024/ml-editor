@@ -4,6 +4,7 @@ import RootPage from "../../layout/RootPage";
 import { useParams } from 'react-router-dom';
 import supabase from '../../supabaseClient';
 import { listen } from '../../utils/Message';
+import useInterval from '../../utils/useInterval';
 import { MessageTypes, dispatchMessage } from '../../utils/Message';
 
 export default function FullView () {
@@ -12,7 +13,7 @@ export default function FullView () {
   const params = useParams();
 
   const dispatch = () => {
-    if (isRendered) {
+    if (files.length) {
       dispatchMessage({
         type: MessageTypes.SKETCH,
         payload: {
@@ -27,24 +28,32 @@ export default function FullView () {
   }
   
   const getProject = async (projectId) => {
-    await supabase.from('Project').select().eq('id', params.project_id).then((res) => {
+    await supabase.from('Project').select().eq('id', projectId).then((res) => {
       if (res.data.length > 0) {
         const files = res.data[0].files
         setFiles(files);
-        dispatch();
       }
     })
   }
 
   useEffect(() => {
-    getProject()
+    getProject(params.project_id)
   }, [params]);
+
+  const clearInterval = useInterval(() => {
+    dispatchMessage({ type: MessageTypes.REGISTER });
+  }, 100);
+  if (isRendered) {
+    clearInterval();
+  }
+  if (isRendered && files.length) {
+    dispatch();
+  }
 
   function handleMessageEvent(message) {
     if (message.type === MessageTypes.REGISTER) {
       if (!isRendered) {
         setIsRendered(true);
-        dispatch();
       }
     }
   }
