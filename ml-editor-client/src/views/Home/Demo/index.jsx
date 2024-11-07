@@ -11,12 +11,21 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import WrapPromise from "@/utils/WrapPromise"
 import supabase from "@/supabaseClient";
 import { Button } from "@/components/ui/button"
@@ -25,28 +34,55 @@ import { initialFiles } from '@/views/IDE/bootstrap';
 import { useAppContext } from "@/context/appContext";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { OpenInNewWindowIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons"
 
 const ProjectCard = function ({ project }) {
   return (
-    <Link to={`/editor?projectId=${project.id}`} className="focus:shadow-none">
-      <Card>
-        <CardHeader>
-          <CardTitle>{project.name}</CardTitle>
-          <CardDescription>{project.name}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {project.created_at}
-        </CardContent>
-        <CardFooter>123</CardFooter>
-      </Card>
-    </Link>
+    <Card className="hover:border-black">
+      <CardHeader>
+        <CardTitle>{project.name}</CardTitle>
+        <CardDescription>{project.name}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {project.created_at}
+      </CardContent>
+      <CardFooter className="flex">
+        <Link to={`/preview?projectId=${project.id}`} className="flex flex-1 focus:shadow-none" target="_blank">
+          <Button variant="ghost" size="icon" className="flex-1">
+            <OpenInNewWindowIcon />
+          </Button>
+        </Link>
+        <Link to={`/editor?projectId=${project.id}`} className="flex flex-1 focus:shadow-none">
+          <Button variant="ghost" size="icon" className="flex-1">
+            <Pencil2Icon />
+          </Button>
+        </Link>
+
+        <AlertDialog>
+          <AlertDialogTrigger className="flex-1 flex">
+            <Button variant="ghost" size="icon" className="flex-1">
+              <TrashIcon />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>确定要删除吗?</AlertDialogTitle>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>取消</AlertDialogCancel>
+              <AlertDialogAction>确定</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardFooter>
+    </Card>
   )
 }
 
 const ProjectList = function ({promiseData}) {
   const { data: projectList, error } = promiseData.read()
   return (
-    <div className="grid grid-cols-5 gap-4 p-10">
+    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 gap-4 p-10">
       { projectList.map((project, index) => (<ProjectCard project={project} key={index} />)) }
     </div>
   )
@@ -54,7 +90,7 @@ const ProjectList = function ({promiseData}) {
 
 const LoadingSkeleton = function () {
   return (
-    <div className="grid grid-cols-5 gap-4 p-10">
+    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 gap-4 p-10">
       {
         [...Array(10)].map((item, index) => {
           return (
