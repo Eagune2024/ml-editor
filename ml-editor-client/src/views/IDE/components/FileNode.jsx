@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { FilesContext } from '..';
+import { FilesContext } from '../IDEView';
 
 export default function FileNode ({files, id}) {
   const { filesValue, setFileValue } = useContext(FilesContext);

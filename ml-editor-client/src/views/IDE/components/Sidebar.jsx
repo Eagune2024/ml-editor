@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import classNames from 'classnames';
 import FileNode from './FileNode';
-import { FilesContext } from '..';
+import { FilesContext } from '../IDEView';
 import {
   Dialog,
   DialogContent,

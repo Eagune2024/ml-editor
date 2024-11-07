@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import PlayIcon from '../../../assets/play.svg';
 import StopIcon from '../../../assets/stop.svg';
 import { MessageTypes, dispatchMessage } from '../../../utils/Message';
-import { FilesContext } from '..';
+import { FilesContext } from '../IDEView';
 import { useNavigate } from "react-router-dom";
 
 const startSketch = (files) => {

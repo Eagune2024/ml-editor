@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useEffect, useImperativeHandle } from 'react';
-import { FilesContext } from '..';
+import { FilesContext } from '../IDEView';
 import { EditorView, keymap, gutter, GutterMarker, lineNumbers }  from "@codemirror/view"
 import { standardKeymap } from "@codemirror/commands"
 import { EditorState, Compartment } from "@codemirror/state"

@@ -1,5 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import IDEView from '../views/IDE';
+import IDEView from '../views/IDE/IDEView';
+import FullView from '../views/IDE/FullView';
 import PreviewView from "../views/Preview";
 import UserView from "../views/User";
 import HomeView from "../views/Home";
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
     path: "/editor",
     name: 'editor',
     element: <IDEView />,
+  },
+  {
+    path: "/project/:project_id",
+    name: 'project',
+    element: <FullView />,
   },
   {
     path: '/user',
