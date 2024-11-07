@@ -36,7 +36,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { OpenInNewWindowIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons"
 
-const ProjectCard = function ({ project }) {
+const ProjectCard = function ({ project, deleteProject }) {
   return (
     <Card className="hover:border-black">
       <CardHeader>
@@ -58,10 +58,8 @@ const ProjectCard = function ({ project }) {
           </Button>
         </Link>
         <AlertDialog>
-          <AlertDialogTrigger className="flex-1 flex focus:shadow-none">
-            <Button variant="ghost" size="icon" className="flex-1">
-              <TrashIcon />
-            </Button>
+          <AlertDialogTrigger className="flex-1 focus:shadow-none h-9 w-9 hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors">
+            <TrashIcon />
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -69,7 +67,7 @@ const ProjectCard = function ({ project }) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="focus:shadow-none">取消</AlertDialogCancel>
-              <AlertDialogAction className="focus:shadow-none">确定</AlertDialogAction>
+              <AlertDialogAction className="focus:shadow-none" onClick={() => { deleteProject(project) }}>确定</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -78,11 +76,11 @@ const ProjectCard = function ({ project }) {
   )
 }
 
-const ProjectList = function ({promiseData}) {
+const ProjectList = function ({promiseData, deleteProject}) {
   const { data: projectList, error } = promiseData.read()
   return (
     <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 gap-4 p-10">
-      { projectList.map((project, index) => (<ProjectCard project={project} key={index} />)) }
+      { projectList.map((project, index) => (<ProjectCard project={project} key={index} deleteProject={deleteProject} />)) }
     </div>
   )
 }
@@ -170,12 +168,19 @@ export default function DemoView () {
     setQuery(Date.now())
     setLoading(false)
   }
+
+  const deleteProject = async (project) => {
+    setLoading(true)
+    await supabase.from('Project').delete().eq('id', project.id)
+    setQuery(Date.now())
+    setLoading(false)
+  }
   
   return (
     <>
       <CreateDialog createProject={createProject} />
       <Suspense fallback={<LoadingSkeleton />}>
-        {<ProjectList promiseData={promiseData} />}
+        {<ProjectList promiseData={promiseData} deleteProject={deleteProject} />}
       </Suspense>
     </>
   )
