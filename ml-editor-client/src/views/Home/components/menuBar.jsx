@@ -8,9 +8,9 @@ export default function MenuBar () {
   const matchNote = useMatch('/note');
   const matchDemo = useMatch('/demo');
 
-  const pptClassNames = classnames('p-8 h-full hover:bg-violet-100', { 'bg-violet-100': matchPPT })
-  const noteClassNames = classnames('p-8 h-full hover:bg-violet-100', { 'bg-violet-100': matchNote })
-  const demoClassNames = classnames('p-8 h-full hover:bg-violet-100', { 'bg-violet-100': matchDemo })
+  const pptClassNames = classnames('p-8 h-full hover:bg-accent', { 'bg-accent': matchPPT })
+  const noteClassNames = classnames('p-8 h-full hover:bg-accent', { 'bg-accent': matchNote })
+  const demoClassNames = classnames('p-8 h-full hover:bg-accent', { 'bg-accent': matchDemo })
 
   return (
     <div className="flex items-center bg-slate-50">
