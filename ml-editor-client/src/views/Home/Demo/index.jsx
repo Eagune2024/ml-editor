@@ -57,9 +57,8 @@ const ProjectCard = function ({ project }) {
             <Pencil2Icon />
           </Button>
         </Link>
-
         <AlertDialog>
-          <AlertDialogTrigger className="flex-1 flex">
+          <AlertDialogTrigger className="flex-1 flex focus:shadow-none">
             <Button variant="ghost" size="icon" className="flex-1">
               <TrashIcon />
             </Button>
@@ -69,8 +68,8 @@ const ProjectCard = function ({ project }) {
               <AlertDialogTitle>确定要删除吗?</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction>确定</AlertDialogAction>
+              <AlertDialogCancel className="focus:shadow-none">取消</AlertDialogCancel>
+              <AlertDialogAction className="focus:shadow-none">确定</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
