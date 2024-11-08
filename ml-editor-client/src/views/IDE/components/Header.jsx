@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { MessageTypes, dispatchMessage } from '../../../utils/Message';
 import { FilesContext } from '../IDEView';
-import { useNavigate } from "react-router-dom";
 import {
   Menubar,
   MenubarContent,
@@ -28,11 +27,6 @@ const startSketch = (files) => {
 
 export default function Header({ syncFileContent, saveProject }) {
   const { filesValue } = useContext(FilesContext);
-
-  const navigate = useNavigate();
-  const toHome = () => {
-    navigate('/')
-  }
 
   return (
     <>
