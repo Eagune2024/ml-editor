@@ -32,6 +32,7 @@
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
+    "console-feed": "^3.6.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.451.0",
     "match-sorter": "^6.3.4",
