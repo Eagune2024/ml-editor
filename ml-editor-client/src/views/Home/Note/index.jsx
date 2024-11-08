@@ -4,8 +4,19 @@ import { FileTextIcon, FileIcon } from "@radix-ui/react-icons"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import WrapPromise from "@/utils/WrapPromise"
 import supabase from "@/supabaseClient";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { useAppContext } from "@/context/appContext";
 
-const BookList = function ({promiseData}) {
+const BookList = function ({promiseData, currentBook}) {
   const { data: bookList, error } = promiseData.read()
   return (
     <nav className="grid gap-1 px-2">
@@ -22,20 +33,58 @@ const BookList = function ({promiseData}) {
   )
 }
 
-export default function NoteView () {
-  const [queryBook, setQueryBook] = useState(Date.now())
+const CreateDialog = function ({createNoteBook}) {
+  const [name, setName] = useState('')
+  const [open, setOpen] = useState(false)
 
+  const openChange = (open) => {
+    setName('')
+    setOpen(open)
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    await createNoteBook(name)
+    setOpen(false)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={openChange}>
+      <DialogTrigger asChild>
+        <Button>添加笔记本</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>添加笔记本</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">名称</Label>
+              <Input
+                id="name"
+                value={name}
+                className="col-span-3"
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">创建</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default function NoteView () {
+  const { session } = useAppContext()
+  const [queryBook, setQueryBook] = useState(Date.now())
   const [currentBook, setCurrentBook] = useState(0)
   const [currentNote, setCurrentNote] = useState(0)
-
-  const bookList = [
-    { name: '默认记事本', note: 5 },
-    { name: 'Vue记事本', note: 12 },
-    { name: 'React记事本', note: 8 },
-    { name: '前端记事本', note: 21 },
-    { name: 'Three记事本', note: 4 },
-    { name: 'p5记事本', note: 2 },
-  ]
 
   const noteList = [
     { name: '1' },
@@ -74,29 +123,42 @@ export default function NoteView () {
     }
   }
 
+  const createNoteBook = async (name) => {
+    await supabase.from('Notebook').insert([{
+      name: name,
+      user_id: session.user.id
+    }])
+    setQueryBook(Date.now())
+  }
+
   const promiseData = useMemo(() => WrapPromise(supabase.from('Notebook').select('name, id, created_at')), [queryBook])
 
   return (
     <div className="flex flex-1 border m-4 rounded-lg overflow-hidden">
-      <ScrollArea className="group flex flex-col gap-4 py-2 w-72 h-full border-r">
-        <Suspense fallback={<>Loading...</>}>
-          {<BookList promiseData={promiseData} />}
-        </Suspense>
-      </ScrollArea>
-      <ScrollArea className="h-full">
-        <div className="group flex flex-col gap-4 py-2 w-80 border-r">
-          <div className="grid gap-1 px-2">
-            {
-              noteList.map((note, index) => (
-                <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
-                  <FileIcon className="mr-2 h-6 w-6"/>
-                  { note.name }
-                </Button>
-              ))
-            }
+      <div className="h-full flex flex-col">
+        <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
+          <Suspense fallback={<>Loading...</>}>
+            {<BookList promiseData={promiseData} currentBook={currentBook}/>}
+          </Suspense>
+        </ScrollArea>
+        <CreateDialog createNoteBook={createNoteBook} />
+      </div>
+      <div className="h-full flex flex-col">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col gap-4 py-2 w-80 border-r">
+            <div className="grid gap-1 px-2">
+              {
+                noteList.map((note, index) => (
+                  <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
+                    <FileIcon className="mr-2 h-6 w-6"/>
+                    { note.name }
+                  </Button>
+                ))
+              }
+            </div>
           </div>
-        </div>
-      </ScrollArea>
+        </ScrollArea>
+      </div>
       <div className="flex-1"></div>
     </div>
     
