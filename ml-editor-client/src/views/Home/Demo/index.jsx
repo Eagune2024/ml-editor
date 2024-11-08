@@ -177,11 +177,11 @@ export default function DemoView () {
   }
   
   return (
-    <>
+    <div>
       <CreateDialog createProject={createProject} />
       <Suspense fallback={<LoadingSkeleton />}>
         {<ProjectList promiseData={promiseData} deleteProject={deleteProject} />}
       </Suspense>
-    </>
+    </div>
   )
 }
