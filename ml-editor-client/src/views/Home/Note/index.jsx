@@ -15,6 +15,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/context/appContext";
+import { Pencil2Icon } from "@radix-ui/react-icons"
 
 const BookList = function ({promiseData, currentBook}) {
   const { data: bookList, error } = promiseData.read()
@@ -144,6 +145,7 @@ export default function NoteView () {
         <CreateDialog createNoteBook={createNoteBook} />
       </div>
       <div className="h-full flex flex-col">
+        <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
         <ScrollArea className="h-full">
           <div className="flex flex-col gap-4 py-2 w-80 border-r">
             <div className="grid gap-1 px-2">
