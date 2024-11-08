@@ -48,6 +48,7 @@ export const initialFiles = () => {
       _id: a,
       isSelectedFile: true,
       fileType: 'file',
+      fileContentType: 'javascript',
       children: [],
       filePath: ''
     },
@@ -57,6 +58,7 @@ export const initialFiles = () => {
       id: b,
       _id: b,
       fileType: 'file',
+      fileContentType: 'html',
       children: [],
       filePath: ''
     },
@@ -66,6 +68,7 @@ export const initialFiles = () => {
       id: c,
       _id: c,
       fileType: 'file',
+      fileContentType: 'css',
       children: [],
       filePath: ''
     }

@@ -1,23 +1,13 @@
 import { useContext } from 'react';
-import PlayIcon from '../../../assets/play.svg';
-import StopIcon from '../../../assets/stop.svg';
 import { MessageTypes, dispatchMessage } from '../../../utils/Message';
 import { FilesContext } from '../IDEView';
 import { useNavigate } from "react-router-dom";
 import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
-  MenubarLabel,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
   MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar"
 import { Link } from "react-router-dom";
