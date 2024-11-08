@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { FileTextIcon, FileIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function NoteView () {
-
   const [currentBook, setCurrentBook] = useState(0)
+  const [currentNote, setCurrentNote] = useState(0)
 
   const bookList = [
     { name: '默认记事本', note: 5 },
@@ -15,27 +16,72 @@ export default function NoteView () {
     { name: 'p5记事本', note: 2 },
   ]
 
+  const noteList = [
+    { name: '1' },
+    { name: '2' },
+    { name: '3' },
+    { name: '4' },
+    { name: '5' },
+    { name: '6' },
+    { name: '7' },
+    { name: '8' },
+    { name: '9' },
+    { name: '1' },
+    { name: '2' },
+    { name: '3' },
+    { name: '4' },
+    { name: '5' },
+    { name: '6' },
+    { name: '7' },
+    { name: '8' },
+    { name: '9' },
+    { name: '1' },
+    { name: '2' },
+    { name: '3' },
+    { name: '4' },
+    { name: '5' },
+    { name: '6' },
+    { name: '7' },
+    { name: '8' },
+    { name: '9' },
+  ]
+
+  const bookClick = (index) => {
+    return () => {
+      setCurrentBook(index)
+      setCurrentNote(0)
+    }
+  }
+
   return (
-    <div className="flex flex-1 border m-4 rounded-lg">
-      <div className="group flex flex-col gap-4 py-2 w-72 h-full border-r">
+    <div className="flex flex-1 border m-4 rounded-lg overflow-hidden">
+      <ScrollArea className="group flex flex-col gap-4 py-2 w-72 h-full border-r">
         <nav className="grid gap-1 px-2">
-          { bookList.map((book, index) => (
-            <Button variant={ index === currentBook? '': 'ghost' } className="text-lg h-12" key={index} onClick={() => setCurrentBook(index)}>
-              <FileTextIcon className="mr-2 h-6 w-6" />
-              { book.name }
-              <span className="ml-auto dark:text-white">{ book.note }</span>
-            </Button>
-          ))}
+          {
+            bookList.map((book, index) => (
+              <Button variant={ index === currentBook? '': 'ghost' } className="text-lg h-12" key={index} onClick={bookClick(index)}>
+                <FileTextIcon className="mr-2 h-6 w-6" />
+                { book.name }
+                <span className="ml-auto dark:text-white">{ book.note }</span>
+              </Button>
+            ))
+          }
         </nav>
-      </div>
-      <div className="group flex flex-col gap-4 py-2 w-72 h-full border-r">
-        <nav className="grid gap-1 px-2">
-          <Button className="text-lg h-12 justify-start">
-            <FileIcon className="mr-2 h-6 w-6"/>
-            默认记事本
-          </Button>
-        </nav>
-      </div>
+      </ScrollArea>
+      <ScrollArea className="h-full">
+        <div className="group flex flex-col gap-4 py-2 w-80 border-r">
+          <div className="grid gap-1 px-2">
+            {
+              noteList.map((note, index) => (
+                <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
+                  <FileIcon className="mr-2 h-6 w-6"/>
+                  { note.name }
+                </Button>
+              ))
+            }
+          </div>
+        </div>
+      </ScrollArea>
       <div className="flex-1"></div>
     </div>
     
