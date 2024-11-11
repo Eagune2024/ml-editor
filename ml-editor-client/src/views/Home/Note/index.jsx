@@ -124,7 +124,7 @@ export default function NoteView () {
     return res
   }
   const fetchNote = async () => {
-    if (currentBook === null) return []
+    if (currentBook === null) return { data: [] }
     const res = await supabase.from('Note').select('name, id, created_at').eq('notebook_id', currentBook)
     if (res.data.length) setCurrentNote(res.data[0].id)
     return res
@@ -140,7 +140,7 @@ export default function NoteView () {
         </div>
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
           <Suspense fallback={<>Loading...</>}>
-            {<BookList promiseData={promiseData} currentBook={currentBook} setCurrentBook={setCurrentBook} onBookClick={bookClick}/>}
+            <BookList promiseData={promiseData} currentBook={currentBook} setCurrentBook={setCurrentBook} onBookClick={bookClick}/>
           </Suspense>
         </ScrollArea>
         <CreateDialog createNoteBook={createNoteBook} />
@@ -150,10 +150,10 @@ export default function NoteView () {
           <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
         </div>
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80 border-r">
-        {currentBook && <Suspense fallback={<>Loading...</>}>
-            {<NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>}
-          </Suspense>}
-          </ScrollArea>
+          <Suspense fallback={<>Loading...</>}>
+            <NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>
+          </Suspense>
+        </ScrollArea>
       </div>
       <div className="flex-1">
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
