@@ -16,6 +16,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/context/appContext";
 import { Pencil2Icon } from "@radix-ui/react-icons"
+import { MDXEditor } from '@mdxeditor/editor'
+import '@mdxeditor/editor/style.css'
 
 const BookList = function ({promiseData, currentBook, setCurrentBook, onBookClick}) {
   const { data: bookList, error } = promiseData.read()
@@ -159,6 +161,7 @@ export default function NoteView () {
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
           文章标题
         </div>
+        <MDXEditor markdown="hello world" onChange={console.log} />
       </div>
     </div>
   )
