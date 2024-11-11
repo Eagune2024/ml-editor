@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import RootPage from "../../layout/RootPage";
-import SplitPane from 'react-split-pane';
 import SideBar from "./components/Sidebar";
 import Editor from "./components/Editor";
-import Console from "./components/Console";
 import PreviewFrame from "./components/PreviewFrame";
 import Header from './components/Header';
 import { initialFiles } from './bootstrap';
