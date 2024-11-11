@@ -99,9 +99,59 @@ const CreateDialog = function ({createNoteBook}) {
   )
 }
 
+const CreateNoteDialog = ({createNote}) => {
+  const [name, setName] = useState('')
+  const [open, setOpen] = useState(false)
+
+  const openChange = (open) => {
+    setName('')
+    setOpen(open)
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    await createNote(name)
+    setOpen(false)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={openChange}>
+      <DialogTrigger asChild>
+        <div className="border-b border-solid border-black h-14">
+          <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>添加笔记</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">标题</Label>
+              <Input
+                id="name"
+                value={name}
+                className="col-span-3"
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">创建</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export default function NoteView () {
   const { session } = useAppContext()
-  const [queryBook, setQueryBook] = useState(Date.now())
+  const [queryBookTrigger, setQueryBookTrigger] = useState(Date.now())
+  const [queryNoteTrigger, setQueryNoteTrigger] = useState(Date.now())
   const [currentBook, setCurrentBook] = useState(null)
   const [currentNote, setCurrentNote] = useState(0)
 
@@ -117,7 +167,17 @@ export default function NoteView () {
       name: name,
       user_id: session.user.id
     }])
-    setQueryBook(Date.now())
+    setQueryBookTrigger(Date.now())
+  }
+
+  const createNote = async (name) => {
+    await supabase.from('Note').insert([{
+      name: name,
+      notebook_id: currentBook,
+      content: '',
+      user_id: session.user.id
+    }])
+    setQueryNoteTrigger(Date.now())
   }
 
   const fetchBook = async () => {
@@ -131,8 +191,8 @@ export default function NoteView () {
     if (res.data.length) setCurrentNote(res.data[0].id)
     return res
   }
-  const promiseData = useMemo(() => WrapPromise(fetchBook()), [queryBook])
-  const promiseNoteData = useMemo(() => WrapPromise(fetchNote()), [queryBook, currentBook])
+  const promiseData = useMemo(() => WrapPromise(fetchBook()), [queryBookTrigger])
+  const promiseNoteData = useMemo(() => WrapPromise(fetchNote()), [queryNoteTrigger, currentBook])
 
   return (
     <div className="flex flex-1 border border-black m-4 rounded-lg overflow-hidden">
@@ -148,9 +208,7 @@ export default function NoteView () {
         <CreateDialog createNoteBook={createNoteBook} />
       </div>
       <div className="h-full flex flex-col border-r border-black">
-        <div className="border-b border-solid border-black h-14">
-          <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
-        </div>
+        <CreateNoteDialog createNote={createNote} />
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80 border-r">
           <Suspense fallback={<>Loading...</>}>
             <NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>
@@ -161,7 +219,7 @@ export default function NoteView () {
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
           文章标题
         </div>
-        <MDXEditor markdown="hello world" onChange={console.log} />
+        <MDXEditor markdown="hello world" onChange={console.log} readOnly />
       </div>
     </div>
   )
