@@ -1,6 +1,13 @@
-import UserAuthForm from './authForm'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import Login from "./login"
+import Register from "./register"
 
-export default function Auth() {
+export default function LoginView () {
   return (
     <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -22,7 +29,18 @@ export default function Auth() {
               注册登陆
             </h1>
           </div>
-          <UserAuthForm />
+          <Tabs defaultValue="register" className="w-[400px] h-[300px]">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="register">注册</TabsTrigger>
+              <TabsTrigger value="login">登陆</TabsTrigger>
+            </TabsList>
+            <TabsContent value="register">
+              <Register />
+            </TabsContent>
+            <TabsContent value="login">
+              <Login />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

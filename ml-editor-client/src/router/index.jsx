@@ -6,6 +6,7 @@ import HomeView from "../views/Home";
 import PPTView from "../views/Home/PPT";
 import DemoView from "../views/Home/Demo";
 import NoteView from "../views/Home/Note";
+import AuthView from "../views/Auth";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
         element: <NoteView />,
       },
     ]
+  },
+  {
+    path: "/login",
+    name: 'login',
+    element: <AuthView />,
   },
   {
     path: "/editor",
