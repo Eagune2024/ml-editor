@@ -63,8 +63,9 @@ const CreateDialog = function ({createNoteBook}) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    await createNoteBook(name)
-    setOpen(false)
+    const { error } = await createNoteBook(name)
+    if (!error) setOpen(false)
+    console.log(error)
   }
 
   return (
@@ -163,21 +164,23 @@ export default function NoteView () {
   }
 
   const createNoteBook = async (name) => {
-    await supabase.from('Notebook').insert([{
+    const result = await supabase.from('Notebook').insert([{
       name: name,
       user_id: session.user.id
     }])
-    setQueryBookTrigger(Date.now())
+    if (!result.error) setQueryBookTrigger(Date.now())
+    return result
   }
 
   const createNote = async (name) => {
-    await supabase.from('Note').insert([{
+    const result = await supabase.from('Note').insert([{
       name: name,
       notebook_id: currentBook,
       content: '',
       user_id: session.user.id
     }])
-    setQueryNoteTrigger(Date.now())
+    if (!result.error) setQueryNoteTrigger(Date.now())
+    return result
   }
 
   const fetchBook = async () => {
