@@ -17,13 +17,13 @@ import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/context/appContext";
 import { Pencil2Icon } from "@radix-ui/react-icons"
 
-const BookList = function ({promiseData, currentBook}) {
+const BookList = function ({promiseData, currentBook, onBookClick}) {
   const { data: bookList, error } = promiseData.read()
   return (
     <nav className="grid gap-1 px-2">
       {
         bookList.map((book, index) => (
-          <Button variant={ index === currentBook? '': 'ghost' } className="text-lg h-12" key={index}>
+          <Button variant={ index === currentBook? '': 'ghost' } className="text-lg h-12" key={index} onClick={onBookClick(index)}>
             <FileTextIcon className="mr-2 h-6 w-6" />
             { book.name }
             <span className="ml-auto dark:text-white">{ book.note }</span>
@@ -142,7 +142,7 @@ export default function NoteView () {
         </div>
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
           <Suspense fallback={<>Loading...</>}>
-            {<BookList promiseData={promiseData} currentBook={currentBook}/>}
+            {<BookList promiseData={promiseData} currentBook={currentBook} onBookClick={bookClick}/>}
           </Suspense>
         </ScrollArea>
         <CreateDialog createNoteBook={createNoteBook} />
@@ -172,6 +172,5 @@ export default function NoteView () {
         </div>
       </div>
     </div>
-    
   )
 }
