@@ -6,19 +6,11 @@ import { FilesContext } from '../IDEView';
 export default function SideBar() {
   const { filesValue } = useContext(FilesContext);
   const rootFile = filesValue.files.find((file) => file.name === 'root')
-  
-  const sidebarClass = classNames({
-    sidebar: true,
-  });
 
   return (
-    <section className={sidebarClass}>
-      <header
-        className="sidebar__header"
-      >
-        <h3 className="sidebar__title">
-          <span>EXPLORER</span>
-        </h3>
+    <section className='flex flex-col w-full h-full'>
+      <header className="h-10 flex pl-2 items-center border-x-0 border border-black">
+        <h3>EXPLORER</h3>
       </header>
       { rootFile ? <FileNode files={filesValue.files} id={rootFile.id} /> : <></>}
     </section>

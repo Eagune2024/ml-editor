@@ -9,6 +9,11 @@ import Header from './components/Header';
 import { initialFiles } from './bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import supabase from '../../supabaseClient';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 
 export const FilesContext = React.createContext();
 
@@ -62,44 +67,29 @@ export default function IDEView () {
 
   return (
     <FilesContext.Provider value={{ filesValue, setFileValue }}>
-      <RootPage>
+      <div className='w-screen h-screen flex flex-col rounded-xl border border-black overflow-hidden'>
         <Header syncFileContent={syncFileContent} saveProject={saveProject} />
-        <main className="editor-preview-container">
-          <SplitPane
-            split='vertical'
-            minSize={150}
-          >
+        <ResizablePanelGroup direction="horizontal" className="h-full overflow-hidden">
+          <ResizablePanel defaultSize={50}>
             <SideBar />
-            <SplitPane
-              split="vertical"
-              defaultSize="50%"
-              resizerStyle={{
-                borderLeftWidth: '2px',
-                borderRightWidth: '2px',
-                width: '2px',
-                margin: '0px 0px'
-              }}
-            >
-              <SplitPane
-                split="horizontal"
-                primary="second"
-                className="editor-preview-subpanel"
-              >
-                <Editor ref={editorRef} />
-                <Console />
-              </SplitPane>
-              <section className="preview-frame-holder">
-                <header className="preview-frame__header">
-                  <h2 className="preview-frame__title">预览</h2>
-                </header>
-                <div className="preview-frame__content">
-                  <PreviewFrame />
-                </div>
-              </section>
-            </SplitPane>
-          </SplitPane>
-        </main>
-      </RootPage>
+          </ResizablePanel>
+          <ResizableHandle withHandle className="bg-black" />
+          <ResizablePanel defaultSize={150} className="relative">
+            <Editor ref={editorRef}  className="relative"/>
+          </ResizablePanel>
+          <ResizableHandle withHandle className="bg-black" />
+          <ResizablePanel defaultSize={150}>
+            <section className="flex flex-col h-full">
+              <header className="h-10 flex pl-2 items-center border-x-0 border border-black">
+                <h2>预览</h2>
+              </header>
+              <div className='w-full relative flex-1'>
+                <PreviewFrame />
+              </div>
+            </section>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
     </FilesContext.Provider>
   )
 }

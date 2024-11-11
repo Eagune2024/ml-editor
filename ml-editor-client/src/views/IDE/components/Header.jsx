@@ -30,7 +30,7 @@ export default function Header({ syncFileContent, saveProject }) {
 
   return (
     <>
-      <Menubar className="rounded-none border-0 border-b px-4 h-12 shadow-none">
+      <Menubar className="px-4 h-12 shadow-none">
         <MenubarMenu>
           <MenubarTrigger className="relative">项目</MenubarTrigger>
           <MenubarContent>

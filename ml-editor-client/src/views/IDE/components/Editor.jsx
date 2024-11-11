@@ -92,28 +92,11 @@ export default React.forwardRef(function Editor(props, ref) {
   }, []);
 
   return (
-    <section ref={ref}>
-      <div className="editor__header">
-        <button
-          className="sidebar__contract"
-        >
-          ←
-        </button>
-        <button
-          className="sidebar__expand"
-        >
-          →
-        </button>
-        <div className="editor__file-name">
-          <span>
-            { currentFile?.name }
-          </span>
-        </div>
+    <section ref={ref} className='flex flex-col h-full'>
+      <div className="h-10 flex pl-2 items-center border-x-0 border border-black">
+        <span>{ currentFile?.name }</span>
       </div>
-      <article
-        ref={codemirrorContainerRef}
-        className="editor-holder"
-      />
+      <article ref={codemirrorContainerRef} className="flex-1" />
     </section>
   )
 })
