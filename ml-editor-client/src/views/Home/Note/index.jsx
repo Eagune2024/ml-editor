@@ -17,16 +17,32 @@ import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/context/appContext";
 import { Pencil2Icon } from "@radix-ui/react-icons"
 
-const BookList = function ({promiseData, currentBook, onBookClick}) {
+const BookList = function ({promiseData, currentBook, setCurrentBook, onBookClick}) {
   const { data: bookList, error } = promiseData.read()
   return (
     <nav className="grid gap-1 px-2">
       {
         bookList.map((book, index) => (
-          <Button variant={ index === currentBook? '': 'ghost' } className="text-lg h-12" key={index} onClick={onBookClick(index)}>
+          <Button variant={ book.id === currentBook? '': 'ghost' } className="text-lg h-12" key={book.id} onClick={onBookClick(book.id)}>
             <FileTextIcon className="mr-2 h-6 w-6" />
             { book.name }
             <span className="ml-auto dark:text-white">{ book.note }</span>
+          </Button>
+        ))
+      }
+    </nav>
+  )
+}
+
+const NoteList = function ({promiseData, currentNote, setCurrentNote}) {
+  const { data: noteList, error } = promiseData.read()
+  return (
+    <nav className="grid gap-1 px-2">
+      {
+        noteList.map((note, index) => (
+          <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
+            <FileIcon className="mr-2 h-6 w-6"/>
+            { note.name }
           </Button>
         ))
       }
@@ -84,38 +100,8 @@ const CreateDialog = function ({createNoteBook}) {
 export default function NoteView () {
   const { session } = useAppContext()
   const [queryBook, setQueryBook] = useState(Date.now())
-  const [currentBook, setCurrentBook] = useState(0)
+  const [currentBook, setCurrentBook] = useState(null)
   const [currentNote, setCurrentNote] = useState(0)
-
-  const noteList = [
-    { name: '1' },
-    { name: '2' },
-    { name: '3' },
-    { name: '4' },
-    { name: '5' },
-    { name: '6' },
-    { name: '7' },
-    { name: '8' },
-    { name: '9' },
-    { name: '1' },
-    { name: '2' },
-    { name: '3' },
-    { name: '4' },
-    { name: '5' },
-    { name: '6' },
-    { name: '7' },
-    { name: '8' },
-    { name: '9' },
-    { name: '1' },
-    { name: '2' },
-    { name: '3' },
-    { name: '4' },
-    { name: '5' },
-    { name: '6' },
-    { name: '7' },
-    { name: '8' },
-    { name: '9' },
-  ]
 
   const bookClick = (index) => {
     return () => {
@@ -132,7 +118,19 @@ export default function NoteView () {
     setQueryBook(Date.now())
   }
 
-  const promiseData = useMemo(() => WrapPromise(supabase.from('Notebook').select('name, id, created_at')), [queryBook])
+  const fetchBook = async () => {
+    const res = await supabase.from('Notebook').select('name, id, created_at')
+    if (res.data.length) setCurrentBook(res.data[0].id)
+    return res
+  }
+  const fetchNote = async () => {
+    if (currentBook === null) return []
+    const res = await supabase.from('Note').select('name, id, created_at').eq('notebook_id', currentBook)
+    if (res.data.length) setCurrentNote(res.data[0].id)
+    return res
+  }
+  const promiseData = useMemo(() => WrapPromise(fetchBook()), [queryBook])
+  const promiseNoteData = useMemo(() => WrapPromise(fetchNote()), [queryBook, currentBook])
 
   return (
     <div className="flex flex-1 border border-black m-4 rounded-lg overflow-hidden">
@@ -142,7 +140,7 @@ export default function NoteView () {
         </div>
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
           <Suspense fallback={<>Loading...</>}>
-            {<BookList promiseData={promiseData} currentBook={currentBook} onBookClick={bookClick}/>}
+            {<BookList promiseData={promiseData} currentBook={currentBook} setCurrentBook={setCurrentBook} onBookClick={bookClick}/>}
           </Suspense>
         </ScrollArea>
         <CreateDialog createNoteBook={createNoteBook} />
@@ -151,20 +149,11 @@ export default function NoteView () {
         <div className="border-b border-solid border-black h-14">
           <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
         </div>
-        <ScrollArea className="flex-1">
-          <div className="flex flex-col gap-4 py-2 w-80 border-r">
-            <div className="grid gap-1 px-2">
-              {
-                noteList.map((note, index) => (
-                  <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
-                    <FileIcon className="mr-2 h-6 w-6"/>
-                    { note.name }
-                  </Button>
-                ))
-              }
-            </div>
-          </div>
-        </ScrollArea>
+        <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80 border-r">
+        {currentBook && <Suspense fallback={<>Loading...</>}>
+            {<NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>}
+          </Suspense>}
+          </ScrollArea>
       </div>
       <div className="flex-1">
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
