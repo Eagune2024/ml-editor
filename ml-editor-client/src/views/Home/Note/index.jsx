@@ -52,7 +52,7 @@ const CreateDialog = function ({createNoteBook}) {
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger asChild>
-        <Button>添加笔记本</Button>
+        <Button className="rounded-b-none">添加笔记本</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -135,8 +135,11 @@ export default function NoteView () {
   const promiseData = useMemo(() => WrapPromise(supabase.from('Notebook').select('name, id, created_at')), [queryBook])
 
   return (
-    <div className="flex flex-1 border m-4 rounded-lg overflow-hidden">
-      <div className="h-full flex flex-col">
+    <div className="flex flex-1 border border-black m-4 rounded-lg overflow-hidden">
+      <div className="h-full flex flex-col border-r border-black">
+        <div className="border-b border-solid border-black h-14 flex items-center pl-4">
+          我的笔记本
+        </div>
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
           <Suspense fallback={<>Loading...</>}>
             {<BookList promiseData={promiseData} currentBook={currentBook}/>}
@@ -144,9 +147,11 @@ export default function NoteView () {
         </ScrollArea>
         <CreateDialog createNoteBook={createNoteBook} />
       </div>
-      <div className="h-full flex flex-col">
-        <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
-        <ScrollArea className="h-full">
+      <div className="h-full flex flex-col border-r border-black">
+        <div className="border-b border-solid border-black h-14">
+          <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
+        </div>
+        <ScrollArea className="flex-1">
           <div className="flex flex-col gap-4 py-2 w-80 border-r">
             <div className="grid gap-1 px-2">
               {
@@ -161,7 +166,11 @@ export default function NoteView () {
           </div>
         </ScrollArea>
       </div>
-      <div className="flex-1"></div>
+      <div className="flex-1">
+        <div className="border-b border-solid border-black h-14 flex items-center pl-4">
+          文章标题
+        </div>
+      </div>
     </div>
     
   )
