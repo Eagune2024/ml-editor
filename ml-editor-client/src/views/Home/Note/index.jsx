@@ -118,9 +118,7 @@ const CreateNoteDialog = ({createNote}) => {
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger asChild>
-        <div className="border-b border-solid border-black h-14">
-          <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
-        </div>
+        <Button variant="outline" className="m-2 w-32 border border-solid border-black"><Pencil2Icon className="mr-2"/>添加笔记</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={onSubmit}>
@@ -208,11 +206,13 @@ export default function NoteView () {
             <BookList promiseData={promiseData} currentBook={currentBook} setCurrentBook={setCurrentBook} onBookClick={bookClick}/>
           </Suspense>
         </ScrollArea>
-        <CreateDialog createNoteBook={createNoteBook} />
+        { session && <CreateDialog createNoteBook={createNoteBook} /> }
       </div>
       <div className="h-full flex flex-col border-r border-black">
-        <CreateNoteDialog createNote={createNote} />
-        <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80 border-r">
+        <div className="border-b border-solid border-black h-14">
+          { session && <CreateNoteDialog createNote={createNote} /> }
+        </div>
+        <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80">
           <Suspense fallback={<>Loading...</>}>
             <NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>
           </Suspense>
