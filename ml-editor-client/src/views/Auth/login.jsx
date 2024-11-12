@@ -8,17 +8,20 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card"
+import { useNavigate } from "react-router-dom";
 
 export default function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
+    if (!error) navigate("/")
   }
 
   return (

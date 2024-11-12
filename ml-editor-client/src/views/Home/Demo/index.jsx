@@ -79,7 +79,7 @@ const ProjectCard = function ({ project, deleteProject }) {
 const ProjectList = function ({promiseData, deleteProject}) {
   const { data: projectList, error } = promiseData.read()
   return (
-    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 gap-4 p-10">
+    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-4 p-10">
       { projectList.map((project, index) => (<ProjectCard project={project} key={index} deleteProject={deleteProject} />)) }
     </div>
   )
@@ -87,7 +87,7 @@ const ProjectList = function ({promiseData, deleteProject}) {
 
 const LoadingSkeleton = function () {
   return (
-    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 gap-4 p-10">
+    <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-4 p-10">
       {
         [...Array(10)].map((item, index) => {
           return (

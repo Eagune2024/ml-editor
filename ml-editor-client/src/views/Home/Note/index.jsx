@@ -218,6 +218,15 @@ export default function NoteView () {
       <div className="flex-1">
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
           { currentNote?.name }
+          {
+            readOnly
+            ?
+              <Button variant="link" onClick={ () => setReadOnly(false) }><Pencil2Icon className="mr-2"/></Button>
+            :
+            <>
+              <Button variant="outline" onClick={ () => setReadOnly(true) }>保存</Button>
+            </>
+          }
         </div>
         { currentNote && <MDXEditor markdown={currentNote.content || ''} onChange={console.log} readOnly={readOnly} /> }
       </div>

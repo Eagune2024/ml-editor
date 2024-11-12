@@ -26,21 +26,12 @@ export default function LoginView () {
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              注册登陆
+              登陆
             </h1>
           </div>
-          <Tabs defaultValue="register" className="w-[400px] h-[300px]">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="register">注册</TabsTrigger>
-              <TabsTrigger value="login">登陆</TabsTrigger>
-            </TabsList>
-            <TabsContent value="register">
-              <Register />
-            </TabsContent>
-            <TabsContent value="login">
-              <Login />
-            </TabsContent>
-          </Tabs>
+          <div className="w-[400px] h-[300px]">
+            <Login />
+          </div>
         </div>
       </div>
     </div>
