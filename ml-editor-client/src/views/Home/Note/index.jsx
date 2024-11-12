@@ -42,7 +42,7 @@ const NoteList = function ({promiseData, currentNote, setCurrentNote}) {
     <nav className="grid gap-1 px-2">
       {
         noteList.map((note, index) => (
-          <Button variant={ index === currentNote? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(index)}>
+          <Button variant={ note.id === currentNote.id ? '': 'ghost' } className="text-lg h-12 justify-start" key={index} onClick={() => setCurrentNote(note)}>
             <FileIcon className="mr-2 h-6 w-6"/>
             { note.name }
           </Button>
@@ -152,12 +152,13 @@ export default function NoteView () {
   const [queryBookTrigger, setQueryBookTrigger] = useState(Date.now())
   const [queryNoteTrigger, setQueryNoteTrigger] = useState(Date.now())
   const [currentBook, setCurrentBook] = useState(null)
-  const [currentNote, setCurrentNote] = useState(0)
+  const [currentNote, setCurrentNote] = useState(null)
+  const [readOnly, setReadOnly] = useState(true)
 
   const bookClick = (index) => {
     return () => {
       setCurrentBook(index)
-      setCurrentNote(0)
+      setCurrentNote(null)
     }
   }
 
@@ -189,7 +190,7 @@ export default function NoteView () {
   const fetchNote = async () => {
     if (currentBook === null) return { data: [] }
     const res = await supabase.from('Note').select('name, id, created_at').eq('notebook_id', currentBook)
-    if (res.data.length) setCurrentNote(res.data[0].id)
+    if (res.data.length) setCurrentNote(res.data[0])
     return res
   }
   const promiseData = useMemo(() => WrapPromise(fetchBook()), [queryBookTrigger])
@@ -198,31 +199,27 @@ export default function NoteView () {
   return (
     <div className="flex flex-1 border border-black m-4 rounded-lg overflow-hidden">
       <div className="h-full flex flex-col border-r border-black">
-        <div className="border-b border-solid border-black h-14 flex items-center pl-4">
-          我的笔记本
-        </div>
+        { session && <div className="border-b border-solid border-black h-14 flex items-center pl-4">我的笔记本</div> }
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-72 border-r">
-          <Suspense fallback={<>Loading...</>}>
+          <Suspense fallback={<div className="m-2">Loading...</div>}>
             <BookList promiseData={promiseData} currentBook={currentBook} setCurrentBook={setCurrentBook} onBookClick={bookClick}/>
           </Suspense>
         </ScrollArea>
         { session && <CreateDialog createNoteBook={createNoteBook} /> }
       </div>
       <div className="h-full flex flex-col border-r border-black">
-        <div className="border-b border-solid border-black h-14">
-          { session && <CreateNoteDialog createNote={createNote} /> }
-        </div>
+        { session && <div className="border-b border-solid border-black h-14"><CreateNoteDialog createNote={createNote} /></div> }
         <ScrollArea className="flex-1 flex flex-col gap-4 py-2 w-80">
-          <Suspense fallback={<>Loading...</>}>
+          <Suspense fallback={<div className="m-2">Loading...</div>}>
             <NoteList promiseData={promiseNoteData} currentNote={currentNote} setCurrentNote={setCurrentNote} onBookClick={bookClick}/>
           </Suspense>
         </ScrollArea>
       </div>
       <div className="flex-1">
         <div className="border-b border-solid border-black h-14 flex items-center pl-4">
-          文章标题
+          { currentNote?.name }
         </div>
-        <MDXEditor markdown="hello world" onChange={console.log} readOnly />
+        { currentNote && <MDXEditor markdown={currentNote.content || ''} onChange={console.log} readOnly={readOnly} /> }
       </div>
     </div>
   )
