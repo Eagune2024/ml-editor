@@ -21,6 +21,7 @@ import '@mdxeditor/editor/style.css'
 
 const BookList = function ({promiseData, currentBook, setCurrentBook, onBookClick}) {
   const { data: bookList, error } = promiseData.read()
+  if (error) return (<></>)
   return (
     <nav className="grid gap-1 px-2">
       {
@@ -38,6 +39,7 @@ const BookList = function ({promiseData, currentBook, setCurrentBook, onBookClic
 
 const NoteList = function ({promiseData, currentNote, setCurrentNote}) {
   const { data: noteList, error } = promiseData.read()
+  if (error) return (<></>)
   return (
     <nav className="grid gap-1 px-2">
       {
