@@ -32,7 +32,7 @@ export default function Header({ syncFileContent, saveProject }) {
     <>
       <Menubar className="px-4 h-12 shadow-none">
         <MenubarMenu>
-          <MenubarTrigger className="relative">项目</MenubarTrigger>
+          <MenubarTrigger>项目</MenubarTrigger>
           <MenubarContent>
             <MenubarItem onClick={saveProject}>
               保存项目<MenubarShortcut>⌘S</MenubarShortcut>
@@ -40,7 +40,7 @@ export default function Header({ syncFileContent, saveProject }) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger className="relative">文件</MenubarTrigger>
+          <MenubarTrigger className="focus:shadow-none">文件</MenubarTrigger>
           <MenubarContent>
             <MenubarItem>
               新建文件
@@ -51,9 +51,7 @@ export default function Header({ syncFileContent, saveProject }) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger>
-            运行
-          </MenubarTrigger>
+          <MenubarTrigger className="focus:shadow-none">运行</MenubarTrigger>
           <MenubarContent>
             <MenubarItem
               onClick={() => {
