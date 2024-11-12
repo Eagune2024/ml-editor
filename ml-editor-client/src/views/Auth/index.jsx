@@ -1,11 +1,4 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 import Login from "./login"
-import Register from "./register"
 
 export default function LoginView () {
   return (
