@@ -184,13 +184,13 @@ export default function NoteView () {
 
   const fetchBook = async () => {
     const res = await supabase.from('Notebook').select('name, id, created_at')
-    if (res.data.length) setCurrentBook(res.data[0].id)
+    if (!result.error && res.data.length) setCurrentBook(res.data[0].id)
     return res
   }
   const fetchNote = async () => {
     if (currentBook === null) return { data: [] }
     const res = await supabase.from('Note').select('name, id, created_at').eq('notebook_id', currentBook)
-    if (res.data.length) setCurrentNote(res.data[0])
+    if (!result.error && res.data.length) setCurrentNote(res.data[0])
     return res
   }
   const promiseData = useMemo(() => WrapPromise(fetchBook()), [queryBookTrigger])
